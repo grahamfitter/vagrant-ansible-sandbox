@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
     machine.vm.network "private_network", ip: "192.168.99.2"
 
     # Install Ansible directly, doesn't cause it to run
-    machine.vm.provision "shell", path: "install_ansible.sh"
+    machine.vm.provision "shell", path: "vagrant/install_ansible.sh"
 
 #    machine.vm.provision "ansible_local" do |ansible|
 #      ansible.playbook = "playbook.yml"
