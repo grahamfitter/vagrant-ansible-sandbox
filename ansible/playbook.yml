@@ -3,7 +3,7 @@
   hosts: webserver_hosts
   become: true
   roles:
-  - webservers
+  - webserver
 
 - name: Containers for Development
   hosts: container_devel_hosts
