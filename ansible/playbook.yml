@@ -5,8 +5,8 @@
   roles:
   - webserver
 
-- name: Containers for Development
+- name: Docker CE
   hosts: container_devel_hosts
   become: true
   roles:
-  - container-devel
+  - docker_ce

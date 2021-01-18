@@ -9,4 +9,4 @@
   hosts: container_devel_hosts
   become: true
   roles:
-  - container-devel
+  - docker_ce
