@@ -20,7 +20,6 @@ Vagrant.configure("2") do |config|
       machine.vm.box = "centos/8"
       machine.vm.hostname = "#{node_name}.local"
       machine.vm.network "private_network", ip: node_ip
-      machine.vm.disk :disk, size: "20GB", primary: true
       machine.vm.synced_folder ".", "/vagrant", type: "nfs"
     end
   end
