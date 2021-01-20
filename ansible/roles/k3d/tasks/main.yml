@@ -1,0 +1,27 @@
+---
+- name: Create temporary directory
+  tempfile:
+    state: directory
+    suffix: ".k3d"
+  register: dir
+
+- name: Download k3d
+  get_url:
+    url: "https://raw.githubusercontent.com/rancher/k3d/main/install.sh"
+    dest: "{{dir.path}}/install.sh"
+    mode: 0755
+
+- name: Install k3d
+  shell: ./install.sh
+  args:
+    chdir: "{{dir.path}}"
+    creates: /usr/local/bin/k3d
+  environment:
+    # Needed because root doesn't have this in the path so install.sh can't find k3d to test it runs
+    PATH: "{{ansible_env.PATH}}:/usr/local/bin"
+  
+- name: Cleanup
+  file:
+    path: "{{dir.path}}/"
+    state: absent
+
