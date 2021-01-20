@@ -1,3 +1,4 @@
 .DS_store
 *.log
 .vagrant
+ansible/inventories/01_vagrant_hosts

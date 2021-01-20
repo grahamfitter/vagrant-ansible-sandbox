@@ -3,9 +3,10 @@
     url: https://download.docker.com/linux/centos/docker-ce.repo
     dest: /etc/yum.repos.d/docker-ce.repo
     mode: 0644
+  when: ansible_distribution == "CentOS"
 
 - name: Install Docker CE
-  yum:
+  package:
     name: "{{ packages }}"
     state: present
   vars:
