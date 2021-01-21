@@ -10,6 +10,6 @@
   become: true
   roles:
 #  - docker_ce
-#  - k3d
-  - kubectl
+  - k3d
+#  - kubectl
 

@@ -4,23 +4,54 @@
     state: directory
     suffix: ".k3d"
   register: dir
+  changed_when: false
 
 - name: Download k3d installer
   get_url:
     url: "https://raw.githubusercontent.com/rancher/k3d/main/install.sh"
     dest: "{{dir.path}}/install.sh"
     mode: 0755
+  changed_when: false
 
-- name: Install k3d
+# install.sh checks for version upgrade and will be a no-op if no change is needed. There's no way
+# of telling from the script whether a change occured, so to determine this we stat the k3d file
+# before and afterwards and compare them later.
+
+- name: Stat previous version
+  stat:
+    path: /usr/local/bin/k3d
+  register: prev_k3d_stat
+  ignore_errors: true
+
+- name: Install k3d. Note this always reports no change even if k3d was installed/updated.
   shell: "{{dir.path}}/install.sh"
   args:
-    creates: /usr/local/bin/k3d
+    #creates: /usr/local/bin/k3d
   environment:
     # Needed because root doesn't have this in the path so install.sh can't find k3d to test it runs
     PATH: "{{ansible_env.PATH}}:/usr/local/bin"
-  
+  changed_when: false
+
+- name: Stat new version
+  stat:
+    path: /usr/local/bin/k3d
+  register: new_k3d_stat
+
+- name: Interpret stat output 
+  set_fact:
+    prev_mtime: "{{ prev_k3d_stat.stat.mtime is defined | ternary (prev_k3d_stat.stat.mtime, 0.0) }}"
+    new_mtime: "{{ new_k3d_stat.stat.mtime }}"
+
+- name: Determine if k3d changed
+  debug:
+    msg:
+    - "Previous timestamp: {{ prev_mtime }}"
+    - "Current timestamp: {{ new_mtime }}"
+  changed_when: new_mtime != prev_mtime
+
 - name: Cleanup
   file:
     path: "{{dir.path}}/"
     state: absent
+  changed_when: false
 
