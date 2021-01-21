@@ -4,28 +4,56 @@
     state: directory
     suffix: ".kubectl"
   register: dir
+  changed_when: false
 
 - name: Download kubectl stable release version file
   get_url:
     url: "https://dl.k8s.io/release/stable.txt"
     dest: "{{dir.path}}/stable.txt"
     mode: 0755
+  changed_when: false
 
-- name: Read version file
+- name: Read available version file
   slurp:
     src: "{{dir.path}}/stable.txt"
-  register: version_b64
+  register: available_version_register
+  changed_when: false
+
+- name: Get installed kubectl version
+  shell: /usr/local/bin/kubectl version --short=true --client=true | awk -F:\  {'print $2'}
+  #shell: echo banana
+  register: installed_version_register
+  ignore_errors: true
+  changed_when: false
+
+- name: Interpret available and installed versions
+  set_fact:
+    available_version: "{{ available_version_register['content'] | b64decode }}"
+    installed_version: "{{ installed_version_register['stdout'] }}"
+
+- name: Determine whether download is required
+  set_fact:
+    do_download: "{{ installed_version != available_version }}"
+
+- name: Output version information
+  debug:
+    msg: 
+    - "Available version = {{ available_version }}"
+    - "Installed version = {{ installed_version }}"
+    - "Do download = {{ do_download }}"
 
 - name: Download kubectl
   get_url:
-    url: "https://dl.k8s.io/release/{{version}}/bin/linux/amd64/kubectl"
+    url: "https://dl.k8s.io/release/{{available_version}}/bin/linux/amd64/kubectl"
     dest: "/usr/local/bin/kubectl"
     mode: 0755
-  vars:
-    version: "{{ version_b64['content'] | b64decode }}"
+    force: true
+  when: do_download
+  changed_when: do_download
     
 - name: Cleanup
   file:
     path: "{{dir.path}}/"
     state: absent
+  changed_when: false
 

@@ -12,9 +12,8 @@
     mode: 0755
 
 - name: Install k3d
-  shell: ./install.sh
+  shell: "{{dir.path}}/install.sh"
   args:
-    chdir: "{{dir.path}}"
     creates: /usr/local/bin/k3d
   environment:
     # Needed because root doesn't have this in the path so install.sh can't find k3d to test it runs
