@@ -5,7 +5,7 @@
     suffix: ".k3d"
   register: dir
 
-- name: Download k3d
+- name: Download k3d installer
   get_url:
     url: "https://raw.githubusercontent.com/rancher/k3d/main/install.sh"
     dest: "{{dir.path}}/install.sh"

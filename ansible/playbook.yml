@@ -11,3 +11,5 @@
   roles:
   - docker_ce
   - k3d
+  - kubectl
+

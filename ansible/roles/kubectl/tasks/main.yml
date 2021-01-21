@@ -1,0 +1,31 @@
+---
+- name: Create temporary directory
+  tempfile:
+    state: directory
+    suffix: ".kubectl"
+  register: dir
+
+- name: Download kubectl stable release version file
+  get_url:
+    url: "https://dl.k8s.io/release/stable.txt"
+    dest: "{{dir.path}}/stable.txt"
+    mode: 0755
+
+- name: Read version file
+  slurp:
+    src: "{{dir.path}}/stable.txt"
+  register: version_b64
+
+- name: Download kubectl
+  get_url:
+    url: "https://dl.k8s.io/release/{{version}}/bin/linux/amd64/kubectl"
+    dest: "/usr/local/bin/kubectl"
+    mode: 0755
+  vars:
+    version: "{{ version_b64['content'] | b64decode }}"
+    
+- name: Cleanup
+  file:
+    path: "{{dir.path}}/"
+    state: absent
+

@@ -9,5 +9,7 @@
   hosts: container_devel_hosts
   become: true
   roles:
-  - docker_ce
-  - k3d
+#  - docker_ce
+#  - k3d
+  - kubectl
+
