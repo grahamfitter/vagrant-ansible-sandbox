@@ -1,0 +1,14 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+
+  - name: Run kubectl
+    command: kubectl version --client=true
+    register: result
+
+  - name: Check whether it ran
+    assert:
+      that: result.failed == False
+

@@ -1,5 +1,5 @@
 ---
 - name: Install Molecule
   pip:
-    name: molecule
+    name: molecule[docker,lint]
 
