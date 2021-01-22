@@ -1,35 +1,28 @@
 ---
-# Tags warning: To use role tags where there is also a parent play tag, both need to be included
-# in the ansible-playbook command. Otherwise ansible will not correctly load environment variables
-# in tasks and will generate spurious errors.
-# Note: Role tags work fine by themselves if there is no tag on the play.
-
 - name: Deployment Testing
-  #tags: deployment_test_play
   hosts: deployment_test_hosts
   become: true
   roles:
     - role: docker_ce
-      tags: docker_ce_role
+      tags: [deployment_test_play, docker_ce_role]
 
 - name: Webserver
-  #tags: webserver_play
   hosts: webserver_hosts
   become: true
   roles:
-    - webserver
+    - role: webserver
+      tags: [webserver_play, webserver_role]
 
 - name: Container Development
-  #tags: container_devel_play
   hosts: container_devel_hosts
   become: true
   roles:
     - role: docker_ce
-      tags: docker_ce_role
+      tags: [container_devel_play, docker_ce_role]
 
     - role: k3d
-      tags: k3d_role
+      tags: [container_devel_play, k3d_role]
 
     - role: kubectl
-      tags: kubectl_role
+      tags: [container_devel_play, kubectl_role]
 
