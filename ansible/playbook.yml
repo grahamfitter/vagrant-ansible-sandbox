@@ -4,15 +4,23 @@
 # in tasks and will generate spurious errors.
 # Note: Role tags work fine by themselves if there is no tag on the play.
 
+- name: Deployment Testing
+  #tags: deployment_test_play
+  hosts: deployment_test_hosts
+  become: true
+  roles:
+    - role: docker_ce
+      tags: docker_ce_role
+
 - name: Webserver
-  tags: webserver_play
+  #tags: webserver_play
   hosts: webserver_hosts
   become: true
   roles:
     - webserver
 
 - name: Container Development
-  tags: container_devel_play
+  #tags: container_devel_play
   hosts: container_devel_hosts
   become: true
   roles:

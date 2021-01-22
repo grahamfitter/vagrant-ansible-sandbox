@@ -23,9 +23,16 @@ Vagrant.configure("2") do |config|
   # Main Ansible control host
   ansible_controller_name = "ansible-controller"
   config.vm.define ansible_controller_name, primary: true do |machine|
+
+    node_name = ansible_controller_name
+    node_ip = "192.168.99.2"
+    node_key_path = "/vagrant/.vagrant/machines/#{node_name}/virtualbox/private_key"
+
+    File.write(ansible_inventory_file, "#{node_name}\tansible_host=#{node_ip}\tansible_ssh_private_key_file=#{node_key_path}\n", mode: "a")
+
     machine.vm.box = "ubuntu/bionic64" # 18.04
-    machine.vm.hostname = "#{ansible_controller_name}.local"
-    machine.vm.network "private_network", ip: "192.168.99.2"
+    machine.vm.hostname = "#{node_name}.local"
+    machine.vm.network "private_network", ip: node_ip
 
     # Install Ansible directly, doesn't cause it to run
     machine.vm.provision "shell", path: "vagrant/install_ansible.sh"

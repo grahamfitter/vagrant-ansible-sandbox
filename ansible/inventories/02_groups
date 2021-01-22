@@ -1,3 +1,6 @@
+[deployment_test_hosts]
+ansible-controller
+
 [webserver_hosts]
 #node-[1:2]
 node-1
