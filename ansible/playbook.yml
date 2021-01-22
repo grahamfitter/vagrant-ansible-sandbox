@@ -4,25 +4,28 @@
   become: true
   roles:
     - role: docker_ce
-      tags: [deployment_test_play, docker_ce_role]
+      tags: [deployment_test_play, docker_ce_role, docker_ce_role_in_deployment_test_play]
+
+    - role: molecule
+      tags: [deployment_test_play, molecule_role, molecule_role_in_deployment_test_play]
 
 - name: Webserver
   hosts: webserver_hosts
   become: true
   roles:
     - role: webserver
-      tags: [webserver_play, webserver_role]
+      tags: [webserver_play, webserver_role, webserver_role_in_webserver_play]
 
 - name: Container Development
   hosts: container_devel_hosts
   become: true
   roles:
     - role: docker_ce
-      tags: [container_devel_play, docker_ce_role]
+      tags: [container_devel_play, docker_ce_role, docker_ce_role_in_container_devel_play]
 
     - role: k3d
-      tags: [container_devel_play, k3d_role]
+      tags: [container_devel_play, k3d_role, k3d_role_in_container_devel_play]
 
     - role: kubectl
-      tags: [container_devel_play, kubectl_role]
+      tags: [container_devel_play, kubectl_role, kubectl_role_in_container_devel_play]
 
