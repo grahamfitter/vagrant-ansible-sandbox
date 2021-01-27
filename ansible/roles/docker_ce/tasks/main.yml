@@ -26,6 +26,7 @@
     - docker-ce
     - docker-ce-cli
     - containerd.io
+    - iptables # FIXME workaround for https://github.com/moby/moby/issues/41799
 
 - name: Start Docker
   service:

@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: centos:8
+# Enable systemd in container, which in turn allows docker CE to be installed and run as service
+    privileged: True # Needed to start docker service, not sure why
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmp:exec # exec is needed because docker_ce role downloads installer script to /tmp and runs it
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

@@ -1,0 +1,13 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+  - name: Run k3d
+    command: k3d version
+    register: result
+
+  - name: Check it worked
+    assert:
+      that: result.failed == False
+
