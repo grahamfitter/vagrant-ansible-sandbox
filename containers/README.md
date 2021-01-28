@@ -17,7 +17,7 @@ The wine_el6_runtime container starts a VNC server to support the WINE framebuff
 docker_run.sh script exposes the standard VNC port 5900. To see that on the host, port forwarding
 is needed. Run this in the top-level directory on the vagrant host:
 
-'''
+```
 vagrant ssh node-2 -- -L5900:node-2.local:5900
 
 # On node-2...
@@ -31,7 +31,7 @@ wine cmd.exe
 # In CMD...
 cd c:\Program Files\Windows NT\Accessories
 wordpad.exe
-'''
+```
 
 On the host, run vncviewer on localhost:5900. The password is "banana". Wordpad should be visible.
 
